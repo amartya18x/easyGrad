@@ -11,11 +11,14 @@ class GradGraph(object):
 
     def evalDFS(self, currNode, inpNodes):
         if currNode.parent is None:
-            assert(currNode in inpNodes), str(
-                currNode) + " does not have an input."
+            print currNode
+            if currNode.val is None:
+                assert(currNode in inpNodes), str(
+                    currNode) + " does not have an input."
             return currNode
         else:
             for nodes in currNode.inpNodes:
-                self.evalDFS(nodes, inpNodes)
+                if nodes.val is None:
+                    self.evalDFS(nodes, inpNodes)
             currNode.forward()
         return currNode
