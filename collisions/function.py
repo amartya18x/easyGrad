@@ -7,7 +7,6 @@ class GradGraph(object):
         for nodes in inpNodes.keys():
             nodes.val = inpNodes[nodes]
         outVal = self.evalDFS(self.output, inpNodes)
-        print outVal
         return outVal.val
 
     def evalDFS(self, currNode, inpNodes):

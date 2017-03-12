@@ -84,6 +84,18 @@ class MultVarNode(NodeVal):
         self.val = self.operand1.val * self.operand2.val
 
 
+class DivVarNode(NodeVal):
+
+    def __init__(self, operand1, operand2, operator='*'):
+        name = str(operand1) + " * " + str(operand2)
+        super(DivVarNode, self).__init__(name, operand1, operand2, operator)
+        self.inpNodes = [operand1, operand2]
+
+    def forward(self):
+        assert(self.operand2.val != 0), "Dividing by zero."
+        self.val = self.operand1.val / self.operand2.val
+
+
 class Integer(AbstractScalar):
 
     def __init__(self, name, parent=None):
@@ -105,6 +117,11 @@ class Integer(AbstractScalar):
 
     def __mul__(self, t):
         inp_fn = MultVarNode(self, t)
+        node = Integer(inp_fn.name, inp_fn)
+        return node
+
+    def __div__(self, t):
+        inp_fn = DivVarNode(self, t)
         node = Integer(inp_fn.name, inp_fn)
         return node
 
