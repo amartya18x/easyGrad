@@ -62,6 +62,28 @@ class AddVarNode(NodeVal):
         self.val = self.operand1.val + self.operand2.val
 
 
+class SubVarNode(NodeVal):
+
+    def __init__(self, operand1, operand2, operator='-'):
+        name = str(operand1) + " - " + str(operand2)
+        super(SubVarNode, self).__init__(name, operand1, operand2, operator)
+        self.inpNodes = [operand1, operand2]
+
+    def forward(self):
+        self.val = self.operand1.val - self.operand2.val
+
+
+class MultVarNode(NodeVal):
+
+    def __init__(self, operand1, operand2, operator='*'):
+        name = str(operand1) + " * " + str(operand2)
+        super(MultVarNode, self).__init__(name, operand1, operand2, operator)
+        self.inpNodes = [operand1, operand2]
+
+    def forward(self):
+        self.val = self.operand1.val * self.operand2.val
+
+
 class Integer(AbstractScalar):
 
     def __init__(self, name, parent=None):
@@ -73,6 +95,16 @@ class Integer(AbstractScalar):
 
     def __add__(self, t):
         inp_fn = AddVarNode(self, t)
+        node = Integer(inp_fn.name, inp_fn)
+        return node
+
+    def __sub__(self, t):
+        inp_fn = SubVarNode(self, t)
+        node = Integer(inp_fn.name, inp_fn)
+        return node
+
+    def __mul__(self, t):
+        inp_fn = MultVarNode(self, t)
         node = Integer(inp_fn.name, inp_fn)
         return node
 
