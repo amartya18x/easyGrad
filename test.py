@@ -54,13 +54,13 @@ def test1():
     t = x - kd
     td = t - 2
     s = td * z
-    sd = s + 100
+    sd = s / 6
     graph = GradGraph(sd)
     output = graph.getOutput({x: 36,
                               y: 2,
                               z: 3,
                               p: 9})
-    assert (output == 130), "Output : "+str(output)
+    assert (output == 5), "Output : "+str(output)
 
 if __name__ == '__main__':
     simpSum()
