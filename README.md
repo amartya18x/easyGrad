@@ -4,7 +4,8 @@ This library aims to provide an easy implementation of doing symbolic operations
 
 ## Testing
 
-```def test1():
+```python 
+    def test1():
     x = Integer("Int1")  
     y = Integer("Int2")  
     z = Integer("Int3")  
