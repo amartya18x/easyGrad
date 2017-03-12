@@ -14,10 +14,20 @@ class AbstractScalar(object):
 
     def __str__(self):
         if self.val is not None:
-            val = " without any value"
-            return "{Integer : " + self.name + val+" }"
+            return "{Integer : " + self.name + " = " + str(self.val) + " }"
         else:
             return "{Integer : " + self.name + " }"
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def __ne__(self, other):
+        # Not strictly necessary, but to avoid having both x==y and x!=y
+        # True at the same time
+        return not(self == other)
 
 
 class NodeVal(object):
@@ -46,6 +56,7 @@ class AddVarNode(NodeVal):
     def __init__(self, operand1, operand2, operator='+'):
         name = str(operand1) + " + " + str(operand2)
         super(AddVarNode, self).__init__(name, operand1, operand2, operator)
+        self.inpNodes = [operand1, operand2]
 
     def forward(self):
         self.val = self.operand1.val + self.operand2.val
@@ -55,8 +66,16 @@ class Integer(AbstractScalar):
 
     def __init__(self, name, parent=None):
         super(Integer, self).__init__(name, parent)
+        if parent is not None:
+            self.inpNodes = parent.inpNodes
+        else:
+            self.inpNodes = []
 
     def __add__(self, t):
         inp_fn = AddVarNode(self, t)
         node = Integer(inp_fn.name, inp_fn)
         return node
+
+    def forward(self):
+        self.parent.forward()
+        self.val = self.parent.val
