@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/amartya18x/easyGrad.svg?branch=master)](https://travis-ci.org/amartya18x/easyGrad)
 # Easy Grad
 
 This library aims to provide an easy implementation of doing symbolic operations in python
