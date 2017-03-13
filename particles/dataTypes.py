@@ -8,6 +8,8 @@ class AbstractScalar(object):
         self.val = None
         self.initialized = False
         self.parent = parent
+        self.gradient = 0
+        self.children = []
 
     def __add__(self, s):
         pass
@@ -63,7 +65,8 @@ class AddVarNode(NodeVal):
         self.gradients = []
 
     def forward(self):
-        self.gradients = [1, 1]
+        self.gradients = {self.operand1: 1,
+                          self.operand2: 1}
         self.val = self.operand1.val + self.operand2.val
 
 
@@ -76,7 +79,8 @@ class SubVarNode(NodeVal):
         self.gradients = []
 
     def forward(self):
-        self.gradients = [1, -1]
+        self.gradients = {self.operand1: 1,
+                          self.operand2: -1}
         self.val = self.operand1.val - self.operand2.val
 
 
@@ -89,7 +93,8 @@ class MultVarNode(NodeVal):
         self.gradients = []
 
     def forward(self):
-        self.gradients = [self.operand2.val, self.operand1.val]
+        self.gradients = {self.operand1: self.operand2.val,
+                          self.operand2: self.operand1.val}
         self.val = self.operand1.val * self.operand2.val
 
 
@@ -103,8 +108,9 @@ class DivVarNode(NodeVal):
 
     def forward(self):
         assert(self.operand2.val != 0), "Dividing by zero."
-        self.gradients = [self.operand1.val,
-                          self.operand1.val * math.log(self.operand2.val)]
+        self.gradients = {self.operand1: self.operand1.val,
+                          self.operand2: self.operand1.val *
+                          math.log(self.operand2.val)}
         self.val = self.operand1.val / self.operand2.val
 
 
@@ -121,9 +127,12 @@ class Integer(AbstractScalar):
     def __add__(self, t):
         if type(t) in [int]:
             t = Integer("Constant", val=t)
-
         inp_fn = AddVarNode(self, t)
         node = Integer(inp_fn.name, inp_fn)
+
+        # Append children for gradient
+        t.children.append(node)
+        self.children.append(node)
         return node
 
     def __sub__(self, t):
@@ -131,6 +140,10 @@ class Integer(AbstractScalar):
             t = Integer("Constant", val=t)
         inp_fn = SubVarNode(self, t)
         node = Integer(inp_fn.name, inp_fn)
+
+        # Append children for gradient
+        t.children.append(node)
+        self.children.append(node)
         return node
 
     def __mul__(self, t):
@@ -138,6 +151,10 @@ class Integer(AbstractScalar):
             t = Integer("Constant", val=t)
         inp_fn = MultVarNode(self, t)
         node = Integer(inp_fn.name, inp_fn)
+
+        # Append children for gradient
+        t.children.append(node)
+        self.children.append(node)
         return node
 
     def __div__(self, t):
@@ -145,6 +162,10 @@ class Integer(AbstractScalar):
             t = Integer("Constant", val=t)
         inp_fn = DivVarNode(self, t)
         node = Integer(inp_fn.name, inp_fn)
+
+        # Append children for gradient
+        t.children.append(node)
+        self.children.append(node)
         return node
 
     def forward(self):
