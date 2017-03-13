@@ -60,7 +60,25 @@ def test1():
                               y: 2,
                               z: 3,
                               p: 9})
-    assert (output == 6), "Output : "+str(output)
+    assert (output == 6), "Output : " + str(output)
+
+
+def gradTest():
+    x = Integer("Int1x")
+    y = Integer("Int2y")
+    z = Integer("Int3z")
+    p = Integer("Int4p")
+    k = p * z
+    t = y * k
+    m = x * z
+    tk = t + m
+    graph = GradGraph(tk)
+    graph.getOutput({x: 9,
+                     y: 2,
+                     z: 9,
+                     p: 2})
+    graph.getGradients(wrt=z)
+    print x.gradient, y.gradient, z.gradient, p.gradient
 
 if __name__ == '__main__':
     simpSum()
@@ -69,3 +87,4 @@ if __name__ == '__main__':
     simpDiv()
     test1()
     divtest()
+    gradTest()
