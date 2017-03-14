@@ -63,6 +63,19 @@ def test1():
     assert (output == 6), "Output : " + str(output)
 
 
+def gradTestSimple():
+    a = Integer("a")
+    b = Integer("b")
+    c = a + b
+    d = b + 6
+    e = c * d
+    graph = GradGraph(e)
+    graph.getOutput({a: 32,
+                     b: 11})
+    graph.getGradients(wrt=b)
+    print a.gradient, b.gradient
+
+
 def gradTest():
     x = Integer("Int1x")
     y = Integer("Int2y")
@@ -70,11 +83,11 @@ def gradTest():
     p = Integer("Int4p")
     k = p * z
     t = y * k
-    m = x * z
-    tk = t + m
-    graph = GradGraph(tk)
+    m = k + t
+    n = m * z
+    graph = GradGraph(n)
     graph.getOutput({x: 9,
-                     y: 2,
+                     y: 9,
                      z: 9,
                      p: 2})
     graph.getGradients(wrt=z)
@@ -88,3 +101,4 @@ if __name__ == '__main__':
     test1()
     divtest()
     gradTest()
+    gradTestSimple()
