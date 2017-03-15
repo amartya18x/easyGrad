@@ -31,6 +31,8 @@ class GradGraph(object):
 
     def calcGrad(self, currNode):
         for idx, nodes in enumerate(currNode.children):
-            self.calcGrad(nodes)
+            if not nodes.grad_calc:
+                self.calcGrad(nodes)
+                nodes.grad_calc = True
             currNode.gradient += nodes.gradient *\
                 nodes.parent.gradients[currNode]
