@@ -2,6 +2,41 @@
 # Easy Grad
 
 This library aims to provide an easy implementation of doing symbolic operations in python
+## Operators allowed
+
+- *exp(x)* and *log(x)*
+```Python
+def testOps():
+    x = Integer('x')
+    y = ops.log(x)
+    z = ops.exp(y)
+    graph = GradGraph(z)
+    graph.getOutput({x: 1})
+    graph.getGradients(wrt=x)
+    print x.gradient
+```
+- *Sigmoid(x)*
+```Python
+
+def activ_fns():
+    x = Double('x')
+    z = ops.sigmoid(x)
+    graph = GradGraph(z)
+    graph.getOutput({x: 110.5})
+    graph.getGradients(wrt=x)
+    print x.gradient
+```
+- *Tanh(x)*
+```Python
+
+def activ_fns():
+    x = Double('x')
+    z = ops.tanh(x)
+    graph = GradGraph(z)
+    graph.getOutput({x: 110.5})
+    graph.getGradients(wrt=x)
+    print x.gradient
+```
 
 ## Testing
 
