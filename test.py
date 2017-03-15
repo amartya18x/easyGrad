@@ -1,5 +1,6 @@
-from particles.dataTypes import Integer
+from particles.dataTypes import Integer, Double
 from collisions.function import GradGraph
+from particles import ops
 
 
 def divtest():
@@ -107,6 +108,26 @@ def gradTestLong():
     graph.getGradients(wrt=z)
     print x.gradient, y.gradient, z.gradient, p.gradient
 
+
+def testOps():
+    x = Integer('x')
+    y = ops.log(x)
+    z = ops.exp(y)
+    graph = GradGraph(z)
+    graph.getOutput({x: 1})
+    graph.getGradients(wrt=x)
+    print x.gradient
+
+
+def activ_fns():
+    x = Double('x')
+    z = ops.sigmoid(x)
+    graph = GradGraph(z)
+    graph.getOutput({x: 110.5})
+    graph.getGradients(wrt=x)
+    print x.gradient
+
+
 if __name__ == '__main__':
     simpSum()
     simpSub()
@@ -117,3 +138,5 @@ if __name__ == '__main__':
     gradTestShort()
     gradTestLong()
     gradTestSimple()
+    testOps()
+    activ_fns()
