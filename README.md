@@ -36,7 +36,7 @@ def gradTest():
                      p: 2})  
     graph.getGradients(wrt=z)  
     print x.gradient, y.gradient, z.gradient, p.gradient
-    ```
+```
 ### This is the same examples as above but the commands are not three op commands.
 
 ```Python
@@ -54,4 +54,4 @@ def gradTestLong():
                      p: 2})  
     graph.getGradients(wrt=z)  
     print x.gradient, y.gradient, z.gradient, p.gradient
-    ```
+```
