@@ -66,17 +66,15 @@ def test1():
 def gradTestSimple():
     a = Integer("a")
     b = Integer("b")
-    c = a + b
-    d = b + 6
-    e = c * d
+    e = (a + b) * (b + 1)
     graph = GradGraph(e)
-    graph.getOutput({a: 32,
-                     b: 11})
+    graph.getOutput({a: 2,
+                     b: 1})
     graph.getGradients(wrt=b)
     print a.gradient, b.gradient
 
 
-def gradTest():
+def gradTestShort():
     x = Integer("Int1x")
     y = Integer("Int2y")
     z = Integer("Int3z")
@@ -93,6 +91,22 @@ def gradTest():
     graph.getGradients(wrt=z)
     print x.gradient, y.gradient, z.gradient, p.gradient
 
+
+def gradTestLong():
+    x = Integer("Int1x")
+    y = Integer("Int2y")
+    z = Integer("Int3z")
+    p = Integer("Int4p")
+    k = p * z
+    n = (k + (y * p * z)) * z
+    graph = GradGraph(n)
+    graph.getOutput({x: 9,
+                     y: 9,
+                     z: 9,
+                     p: 2})
+    graph.getGradients(wrt=z)
+    print x.gradient, y.gradient, z.gradient, p.gradient
+
 if __name__ == '__main__':
     simpSum()
     simpSub()
@@ -100,5 +114,6 @@ if __name__ == '__main__':
     simpDiv()
     test1()
     divtest()
-    gradTest()
+    gradTestShort()
+    gradTestLong()
     gradTestSimple()

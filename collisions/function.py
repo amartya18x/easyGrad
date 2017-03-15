@@ -34,6 +34,5 @@ class GradGraph(object):
             if not nodes.grad_calc:
                 self.calcGrad(nodes)
                 nodes.grad_calc = True
-            print nodes.parent
             currNode.gradient += nodes.gradient *\
                 nodes.parent.gradients[currNode]
