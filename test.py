@@ -72,7 +72,8 @@ def gradTestSimple():
     graph.getOutput({a: 2,
                      b: 1})
     graph.getGradients(wrt=b)
-    print a.gradient, b.gradient
+    print e
+    print b.gradient
 
 
 def gradTestShort():
@@ -116,14 +117,15 @@ def testOps():
     graph = GradGraph(z)
     graph.getOutput({x: 1})
     graph.getGradients(wrt=x)
-    print x.gradient
+    print x.gradient, "HE"
 
 
 def activ_fns():
     x = Double('x')
-    z = ops.sigmoid(x)
+    z = ops.tanh(x)
     graph = GradGraph(z)
-    graph.getOutput({x: 110.5})
+    print "SIGM"
+    print graph.getOutput({x: -110.5})
     graph.getGradients(wrt=x)
     print x.gradient
 

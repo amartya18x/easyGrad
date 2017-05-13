@@ -11,6 +11,8 @@ class AbstractScalar(object):
         self.gradient = 0
         self.children = []
         self.grad_calc = False
+        self.grad_make = False
+        self.gradient_node = None
 
     def __add__(self, s):
         pass
