@@ -1,6 +1,7 @@
-from particles.dataTypes import Integer, Double
+from particles.dataTypes import Integer, Double, DoubleTensor
 from collisions.function import GradGraph
 from particles import ops
+import numpy as np
 
 
 def divtest():
@@ -44,7 +45,38 @@ def simpDiv():
     output = graph.getOutput({x: 8})
     assert(output == 2)
 
+# Tensor Test
 
+def TensorSum():
+    x = DoubleTensor("Tensor1")
+    y = x + 3
+    graph = GradGraph(y)
+    output = graph.getOutput({x: 1})
+    assert(output == 4)
+
+
+def TensorOp():
+    x = DoubleTensor("Tensor1")
+    y = x - [3, 4]
+    z = y * x
+    graph = GradGraph(z)
+    output = graph.getOutput({x: 10})
+    assert(np.all(output == 10 * (10 - np.asarray([3, 4]))))
+    graph.getGradients(wrt=x)
+    assert(np.all(x.gradient == 2 * 10 - np.asarray([3, 4])))
+
+def dotProduct():
+    x = DoubleTensor("Tensor1")
+    y = x.dot([3, 4])
+    z = y.dot([4, 5])
+    graph = GradGraph(z)
+    output = graph.getOutput({x: [3, 4]})
+    graph.getGradients(wrt=x)
+    #graph.getGradients(wrt=y)
+    print(output)
+    #print(y.gradient)
+    #print(x.gradient)
+    
 def test1():
     x = Integer("Int1")
     y = Integer("Int2")
@@ -72,7 +104,7 @@ def gradTestSimple():
     graph.getOutput({a: 2,
                      b: 1})
     graph.getGradients(wrt=b)
-    print a.gradient, b.gradient
+    assert(b.gradient == 5), "Gradient : " + str(b.gradient)
 
 
 def gradTestShort():
@@ -90,7 +122,7 @@ def gradTestShort():
                      z: 9,
                      p: 2})
     graph.getGradients(wrt=z)
-    print x.gradient, y.gradient, z.gradient, p.gradient
+    assert(z.gradient == 360 ), "Gradient : "+str(z.gradient)
 
 
 def gradTestLong():
@@ -106,7 +138,7 @@ def gradTestLong():
                      z: 9,
                      p: 2})
     graph.getGradients(wrt=z)
-    print x.gradient, y.gradient, z.gradient, p.gradient
+    assert(z.gradient == 360), "Gradient : "+str(z.gradient)
 
 
 def testOps():
@@ -116,7 +148,7 @@ def testOps():
     graph = GradGraph(z)
     graph.getOutput({x: 1})
     graph.getGradients(wrt=x)
-    print x.gradient
+    assert(x.gradient == 1), "Gradient :" + str(x.gradient)
 
 
 def activ_fns():
@@ -125,7 +157,7 @@ def activ_fns():
     graph = GradGraph(z)
     graph.getOutput({x: 110.5})
     graph.getGradients(wrt=x)
-    print x.gradient
+    assert(x.gradient == 0), "Gradient : "+x.gradient
 
 
 if __name__ == '__main__':
@@ -140,3 +172,6 @@ if __name__ == '__main__':
     gradTestSimple()
     testOps()
     activ_fns()
+    TensorSum()
+    TensorOp()
+    dotProduct()
