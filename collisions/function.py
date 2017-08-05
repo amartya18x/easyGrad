@@ -38,8 +38,8 @@ class GradGraph(object):
                 self.calcGrad(nodes)
                 nodes.grad_calc = True
             if isinstance(nodes.parent.gradients[currNode], (list, tuple, np.ndarray)):
-                if nodes.parent.gradients[currNode].size == 1:
-                   currNode.gradient = currNode.gradient + nodes.gradient * nodes.parent.gradients[currNode]
+                if nodes.parent.gradients[currNode].size == 1 or nodes.parent.no_outer:
+                    currNode.gradient = currNode.gradient + nodes.gradient * nodes.parent.gradients[currNode]
                 else:
                     currNode.gradient = currNode.gradient + np.outer(nodes.gradient, nodes.parent.gradients[currNode])
             else:
