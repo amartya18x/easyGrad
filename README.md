@@ -90,3 +90,29 @@ def gradTestLong():
     graph.getGradients(wrt=z)  
     print x.gradient, y.gradient, z.gradient, p.gradient
 ```
+Tensor Operations
+```Python
+
+def dotProduct():
+    x = DoubleTensor("Tensor1")
+    y = x.dot([3, 4])
+    z = y.dot([4, 5])
+    graph = GradGraph(z)
+    output = graph.getOutput({x: [3, 4]})
+    graph.getGradients(wrt=x)
+    assert(np.all(output == [100, 125]))
+    assert(np.all(x.gradient == [[ 12., 16.], [ 15., 20.]]))
+	
+
+def TensorOp():
+    x = DoubleTensor("Tensor1")
+    y = x - [3, 4]
+    z = y * x
+    graph = GradGraph(z)
+    output = graph.getOutput({x: [10]})
+    assert(np.all(output == 10 * (10 - np.asarray([3, 4]))))
+    graph.getGradients(wrt=x)
+    assert(np.all(x.gradient == 2 * 10 - np.asarray([3, 4])))
+
+```
+

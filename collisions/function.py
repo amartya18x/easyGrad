@@ -1,3 +1,4 @@
+import numpy as np
 class GradGraph(object):
 
     def __init__(self, output):
@@ -21,6 +22,7 @@ class GradGraph(object):
                 if nodes.val is None:
                     self.evalDFS(nodes, inpNodes)
             currNode.forward()
+            currNode.forward_done = True
         self.evaluated = True
         return currNode
 
@@ -32,7 +34,15 @@ class GradGraph(object):
     def calcGrad(self, currNode):
         for idx, nodes in enumerate(currNode.children):
             if not nodes.grad_calc:
+                assert(nodes.forward_done), "Forward not done with "+str(nodes)
                 self.calcGrad(nodes)
                 nodes.grad_calc = True
-            currNode.gradient += nodes.gradient *\
-                nodes.parent.gradients[currNode]
+            if isinstance(nodes.parent.gradients[currNode], (list, tuple, np.ndarray)):
+                if nodes.parent.gradients[currNode].size == 1:
+                   currNode.gradient = currNode.gradient + nodes.gradient * nodes.parent.gradients[currNode]
+                else:
+                    currNode.gradient = currNode.gradient + np.outer(nodes.gradient, nodes.parent.gradients[currNode])
+            else:
+                currNode.gradient = currNode.gradient + nodes.gradient *\
+                                    nodes.parent.gradients[currNode]
+                

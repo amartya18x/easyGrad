@@ -1,7 +1,6 @@
 from dataTypes import Double
 import dynamics as dy
 
-
 def create_node(inp_fn, x):
     node = Double(inp_fn.name, inp_fn)
     x.children.append(node)
