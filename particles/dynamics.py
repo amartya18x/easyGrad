@@ -6,6 +6,7 @@ class ValNodes(object):
     def __init__(self):
         self.type_node = ValNodes
         #For future work to define common properties
+        self.no_outer = True
         
 class MonoNodeVal(ValNodes):
 
@@ -14,6 +15,7 @@ class MonoNodeVal(ValNodes):
         self.name = name
         self.operand = operand
         self.operator = operator
+        self.solo = True
         
     def forward(self):
         pass
@@ -206,6 +208,7 @@ class TensorDotVarNode(TensorDiNodeVal):
         super(TensorDotVarNode, self).__init__(name, operand1, operand2, operator)
         self.inpNodes = [operand1, operand2]
         self.gradients = []
+        self.no_outer = False
         
     def forward(self):
         super(TensorDotVarNode, self).forward()
@@ -238,11 +241,13 @@ class LogNode(MonoNodeVal):
         self.gradients = []
 
     def forward(self):
-        assert(self.operand.val != 0)
-        self.val = math.log(float(self.operand.val))
+        assert(np.any(self.operand.val != 0))
+        if isinstance(self.operand.val, (list, tuple, np.ndarray)):
+            self.val = np.log(self.operand.val.astype(np.float32))
+        else:
+            self.val = math.log(float(self.operand.val))
         self.gradients = {self.operand: 1.0 / self.operand.val}
-
-
+        
 class SigmNode(MonoNodeVal):
 
     def __init__(self, operand):
@@ -252,7 +257,10 @@ class SigmNode(MonoNodeVal):
         self.gradients = []
 
     def forward(self):
-        self.val = 1.0 / (1 + math.exp(-float(self.operand.val)))
+        if isinstance(self.operand.val, (list, tuple, np.ndarray)):
+            self.val = 1.0 / (1 + np.exp(self.operand.val.astype(np.float32)))
+        else:
+            self.val = 1.0 / (1 + math.exp(-float(self.operand.val)))
         self.gradients = {self.operand: self.val * (1.0 - self.val)}
 
 
@@ -265,7 +273,11 @@ class TanhNode(MonoNodeVal):
         self.gradients = []
 
     def forward(self):
-        posex = math.exp(float(self.operand.val))
-        negex = math.exp(-float(self.operand.val))
+        if isinstance(self.operand.val, (list, tuple, np.ndarray)):
+            posex = np.exp(self.operand.val.astype(np.float32))
+            negex = np.exp(-self.operand.val.sdtype(np.float32))
+        else:
+            posex = math.exp(float(self.operand.val))
+            negex = math.exp(-float(self.operand.val))
         self.val = (posex - negex) / (posex + negex)
         self.gradients = {self.operand: 1.0 - self.val**2}

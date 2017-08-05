@@ -58,12 +58,14 @@ def TensorSum():
 def TensorOp():
     x = DoubleTensor("Tensor1")
     y = x - [3, 4]
-    z = y * x
+    z = ops.log(y * x)
     graph = GradGraph(z)
     output = graph.getOutput({x: [10]})
-    assert(np.all(output == 10 * (10 - np.asarray([3, 4]))))
+    assert(np.all(np.isclose(output, np.log(10 * (10 - np.asarray([3, 4]))))))
     graph.getGradients(wrt=x)
-    assert(np.all(x.gradient == 2 * 10 - np.asarray([3, 4])))
+    a = 2 * 10 - np.asarray([3, 4])
+    b = 1.0/np.exp(np.asarray(output))
+    assert(np.all(np.isclose(x.gradient, a * b)))
 
 def dotProduct():
     x = DoubleTensor("Tensor1")
