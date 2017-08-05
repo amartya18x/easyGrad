@@ -1,12 +1,20 @@
 import math
 import numpy as np
 
-class MonoNodeVal(object):
+class ValNodes(object):
+
+    def __init__(self):
+        self.type_node = ValNodes
+        #For future work to define common properties
+        
+class MonoNodeVal(ValNodes):
 
     def __init__(self, name, operand, operator):
+        super(MonoNodeVal, self).__init__()
         self.name = name
         self.operand = operand
-
+        self.operator = operator
+        
     def forward(self):
         pass
 
@@ -14,14 +22,15 @@ class MonoNodeVal(object):
         pass
 
     def __str__(self):
-        string = self.operand + " : " +\
-            str(self.operand) + '\n' + '=' * 10
+        string = self.operator + " : " +\
+                 str(self.operand) + '\n' + '=' * 10
         return string
 
 
-class DiNodeVal(object):
+class DiNodeVal(ValNodes):
 
     def __init__(self, name, operand1, operand2, operator):
+        super(DiNodeVal, self).__init__()
         self.name = name
         self.operand1 = operand1
         self.operand2 = operand2
@@ -39,9 +48,10 @@ class DiNodeVal(object):
                  str(self.operand2) + '\n' + '=' * 10
         return string
 
-class TensorDiNodeVal(object):
+class TensorDiNodeVal(ValNodes):
 
     def __init__(self, name, operand1, operand2, operator):
+        super(TensorDiNodeVal, self).__init__()
         self.name = name
         self.operand1 = operand1
         self.operand2 = operand2
@@ -201,11 +211,8 @@ class TensorDotVarNode(TensorDiNodeVal):
         super(TensorDotVarNode, self).forward()
         self.gradients = {self.operand1: self.operand2.val.T,
                           self.operand2: self.operand1.val.T}
-        print(self.gradients)
-        print(self)
         self.val = np.dot(self.operand1.val, self.operand2.val)
-        print("DONE1")
-
+        
 # Element wise single node operations
 # This includes operations for which you need only one operand
 

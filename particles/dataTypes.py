@@ -4,6 +4,7 @@ class Particle(object):
     def __init__(self):
         self.convertList = [int, float, list]
         self.type = 'particle'
+        self.forward_done = False
         
 class AbstractScalar(Particle):
 
@@ -192,9 +193,9 @@ class AbstractTensor(Particle):
 
     def __str__(self):
         if self.val is not None:
-            return "{Matrix : " + self.name  + " }"
+            return "{Tensor : " + self.name  + " }"
         else:
-            return "{Matrix : " + self.name + " }"
+            return "{Tensor : " + self.name + " }"
 
     def __hash__(self):
         return hash(self.name)
@@ -208,7 +209,6 @@ class AbstractTensor(Particle):
         return not(self == other)
 
     def dot(self, other):
-        print(type(other))
         assert(type(other) not in self.convertList)
 
 class DoubleTensor(AbstractTensor):

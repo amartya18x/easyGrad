@@ -60,7 +60,7 @@ def TensorOp():
     y = x - [3, 4]
     z = y * x
     graph = GradGraph(z)
-    output = graph.getOutput({x: 10})
+    output = graph.getOutput({x: [10]})
     assert(np.all(output == 10 * (10 - np.asarray([3, 4]))))
     graph.getGradients(wrt=x)
     assert(np.all(x.gradient == 2 * 10 - np.asarray([3, 4])))
@@ -72,10 +72,8 @@ def dotProduct():
     graph = GradGraph(z)
     output = graph.getOutput({x: [3, 4]})
     graph.getGradients(wrt=x)
-    #graph.getGradients(wrt=y)
-    print(output)
-    #print(y.gradient)
-    #print(x.gradient)
+    assert(np.all(output == [100, 125]))
+    assert(np.all(x.gradient == [[ 12., 16.], [ 15., 20.]]))
     
 def test1():
     x = Integer("Int1")
