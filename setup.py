@@ -55,10 +55,10 @@ setup(
     long_description=read('README.md'),
     dependency_links = [],
     classifiers=[
-        'Development Status :: 4 - beta'
-        'Intended Audience :: Researchers',
-        'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python',
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     install_requires=['numpy']
