@@ -44,11 +44,11 @@ for dirpath, dirnames, filenames in os.walk(package_dir):
 
 setup(
     name = "easyGrad",
-    version = "0.0.1",
+    version = "0.0.3",
     author = "Amartya Sanyal",
     author_email = "amartya18x@gmail.com",
     description = ("A python package to do auto differentiation."),
-    license = "BSD",
+    license = "License.md",
     keywords = "autodiff machine-learning deep learning",
     url = "http://packages.python.org/easyGrad",
     packages = packages,
