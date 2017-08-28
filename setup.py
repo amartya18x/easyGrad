@@ -5,8 +5,11 @@ from setuptools import setup
 # Used for the long_description.  It's nice, because now 1) we have a top level
 # README file and 2) it's easier to type in the README file than to put a raw
 # string in below ...
+
+
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 def fullsplit(path, result=None):
     """
@@ -21,9 +24,9 @@ def fullsplit(path, result=None):
     if head == path:
         return result
     return fullsplit(head, [tail] + result)
- 
-package_dir = "particles"
- 
+
+package_dir = "easyGrad"
+
 packages = []
 for dirpath, dirnames, filenames in os.walk(package_dir):
     # ignore dirnames that start with '.'
@@ -33,27 +36,27 @@ for dirpath, dirnames, filenames in os.walk(package_dir):
     if "__init__.py" in filenames:
         packages.append(".".join(fullsplit(dirpath)))
 
-package_dir = 'tests'
-for dirpath, dirnames, filenames in os.walk(package_dir):
-    # ignore dirnames that start with '.'
-    for i, dirname in enumerate(dirnames):
-        if dirname.startswith("."):
-            del dirnames[i]
-    if "__init__.py" in filenames:
-        packages.append(".".join(fullsplit(dirpath)))
+# package_dir = 'tests'
+# for dirpath, dirnames, filenames in os.walk(package_dir):
+#     # ignore dirnames that start with '.'
+#     for i, dirname in enumerate(dirnames):
+#         if dirname.startswith("."):
+#             del dirnames[i]
+#     if "__init__.py" in filenames:
+#         packages.append(".".join(fullsplit(dirpath)))
 
 setup(
-    name = "easyGrad",
-    version = "0.0.3",
-    author = "Amartya Sanyal",
-    author_email = "amartya18x@gmail.com",
-    description = ("A python package to do auto differentiation."),
-    license = "License.md",
-    keywords = "autodiff machine-learning deep learning",
-    url = "http://packages.python.org/easyGrad",
-    packages = packages,
+    name="easyGrad",
+    version="0.0.4",
+    author="Amartya Sanyal",
+    author_email="amartya18x@gmail.com",
+    description=("A python package to do auto differentiation."),
+    license="License.md",
+    keywords="autodiff machine-learning deep learning",
+    url="http://packages.python.org/easyGrad",
+    packages=packages,
     long_description=read('README.md'),
-    dependency_links = [],
+    dependency_links=[],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',

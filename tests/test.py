@@ -47,6 +47,7 @@ def simpDiv():
 
 # Tensor Test
 
+
 def TensorSum():
     x = DoubleTensor("Tensor1")
     y = x + 3
@@ -64,8 +65,9 @@ def TensorOp():
     assert(np.all(np.isclose(output, np.log(10 * (10 - np.asarray([3, 4]))))))
     graph.getGradients(wrt=x)
     a = 2 * 10 - np.asarray([3, 4])
-    b = 1.0/np.exp(np.asarray(output))
+    b = 1.0 / np.exp(np.asarray(output))
     assert(np.all(np.isclose(x.gradient, a * b)))
+
 
 def dotProduct():
     x = DoubleTensor("Tensor1")
@@ -75,8 +77,9 @@ def dotProduct():
     output = graph.getOutput({x: [3, 4]})
     graph.getGradients(wrt=x)
     assert(np.all(output == [100, 125]))
-    assert(np.all(x.gradient == [[ 12., 16.], [ 15., 20.]]))
-    
+    assert(np.all(x.gradient == [[12., 16.], [15., 20.]]))
+
+
 def test1():
     x = Integer("Int1")
     y = Integer("Int2")
@@ -122,7 +125,7 @@ def gradTestShort():
                      z: 9,
                      p: 2})
     graph.getGradients(wrt=z)
-    assert(z.gradient == 360 ), "Gradient : "+str(z.gradient)
+    assert(z.gradient == 360), "Gradient : " + str(z.gradient)
 
 
 def gradTestLong():
@@ -138,7 +141,7 @@ def gradTestLong():
                      z: 9,
                      p: 2})
     graph.getGradients(wrt=z)
-    assert(z.gradient == 360), "Gradient : "+str(z.gradient)
+    assert(z.gradient == 360), "Gradient : " + str(z.gradient)
 
 
 def testOps():
@@ -157,7 +160,7 @@ def activ_fns():
     graph = GradGraph(z)
     graph.getOutput({x: 110.5})
     graph.getGradients(wrt=x)
-    assert(x.gradient == 0), "Gradient : "+x.gradient
+    assert(x.gradient == 0), "Gradient : " + x.gradient
 
 
 if __name__ == '__main__':
