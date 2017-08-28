@@ -36,18 +36,9 @@ for dirpath, dirnames, filenames in os.walk(package_dir):
     if "__init__.py" in filenames:
         packages.append(".".join(fullsplit(dirpath)))
 
-# package_dir = 'tests'
-# for dirpath, dirnames, filenames in os.walk(package_dir):
-#     # ignore dirnames that start with '.'
-#     for i, dirname in enumerate(dirnames):
-#         if dirname.startswith("."):
-#             del dirnames[i]
-#     if "__init__.py" in filenames:
-#         packages.append(".".join(fullsplit(dirpath)))
-
 setup(
     name="easyGrad",
-    version="0.0.4",
+    version="1.0.0",
     author="Amartya Sanyal",
     author_email="amartya18x@gmail.com",
     description=("A python package to do auto differentiation."),
@@ -58,7 +49,7 @@ setup(
     long_description=read('README.md'),
     dependency_links=[],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.7',

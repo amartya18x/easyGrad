@@ -2,6 +2,7 @@ from particles.dataTypes import Integer, Double, DoubleTensor
 from collisions.function import GradGraph
 from particles import ops
 import numpy as np
+import unittest
 
 
 def divtest():
@@ -11,7 +12,7 @@ def divtest():
     graph = GradGraph(z)
     output = graph.getOutput({x: 6,
                               y: 2})
-    assert(output == 3)
+    return output == 3
 
 
 def simpSum():
@@ -19,7 +20,7 @@ def simpSum():
     y = x + 3
     graph = GradGraph(y)
     output = graph.getOutput({x: 1})
-    assert(output == 4)
+    return output == 4
 
 
 def simpSub():
@@ -27,7 +28,7 @@ def simpSub():
     y = x - 3
     graph = GradGraph(y)
     output = graph.getOutput({x: 1})
-    assert(output == -2)
+    return output == -2
 
 
 def simpMul():
@@ -35,7 +36,7 @@ def simpMul():
     y = x * 3
     graph = GradGraph(y)
     output = graph.getOutput({x: 2})
-    assert(output == 6)
+    return output == 6
 
 
 def simpDiv():
@@ -43,7 +44,7 @@ def simpDiv():
     y = x / 4
     graph = GradGraph(y)
     output = graph.getOutput({x: 8})
-    assert(output == 2)
+    return output == 2
 
 # Tensor Test
 
@@ -53,7 +54,7 @@ def TensorSum():
     y = x + 3
     graph = GradGraph(y)
     output = graph.getOutput({x: 1})
-    assert(output == 4)
+    return output == 4
 
 
 def TensorOp():
@@ -66,7 +67,7 @@ def TensorOp():
     graph.getGradients(wrt=x)
     a = 2 * 10 - np.asarray([3, 4])
     b = 1.0 / np.exp(np.asarray(output))
-    assert(np.all(np.isclose(x.gradient, a * b)))
+    return np.all(np.isclose(x.gradient, a * b))
 
 
 def dotProduct():
@@ -76,8 +77,9 @@ def dotProduct():
     graph = GradGraph(z)
     output = graph.getOutput({x: [3, 4]})
     graph.getGradients(wrt=x)
-    assert(np.all(output == [100, 125]))
-    assert(np.all(x.gradient == [[12., 16.], [15., 20.]]))
+    flag1 = np.all(output == [100, 125])
+    flag2 = np.all(x.gradient == [[12., 16.], [15., 20.]])
+    return flag1 and flag2
 
 
 def test1():
@@ -96,7 +98,7 @@ def test1():
                               y: 2,
                               z: 3,
                               p: 9})
-    assert (output == 6), "Output : " + str(output)
+    return output == 6
 
 
 def gradTestSimple():
@@ -107,7 +109,7 @@ def gradTestSimple():
     graph.getOutput({a: 2,
                      b: 1})
     graph.getGradients(wrt=b)
-    assert(b.gradient == 5), "Gradient : " + str(b.gradient)
+    return b.gradient == 5
 
 
 def gradTestShort():
@@ -125,7 +127,7 @@ def gradTestShort():
                      z: 9,
                      p: 2})
     graph.getGradients(wrt=z)
-    assert(z.gradient == 360), "Gradient : " + str(z.gradient)
+    return z.gradient == 360
 
 
 def gradTestLong():
@@ -141,7 +143,7 @@ def gradTestLong():
                      z: 9,
                      p: 2})
     graph.getGradients(wrt=z)
-    assert(z.gradient == 360), "Gradient : " + str(z.gradient)
+    return True
 
 
 def testOps():
@@ -151,7 +153,7 @@ def testOps():
     graph = GradGraph(z)
     graph.getOutput({x: 1})
     graph.getGradients(wrt=x)
-    assert(x.gradient == 1), "Gradient :" + str(x.gradient)
+    return x.gradient == 1
 
 
 def activ_fns():
@@ -160,21 +162,71 @@ def activ_fns():
     graph = GradGraph(z)
     graph.getOutput({x: 110.5})
     graph.getGradients(wrt=x)
-    assert(x.gradient == 0), "Gradient : " + x.gradient
+    return x.gradient == 0
 
+
+class TestCase(unittest.TestCase):
+
+    def test_simp_sum(self):
+        """ Simple Summation Test"""
+        self.assertTrue(simpSum())
+
+    def test_simp_sub(self):
+        """ Simple Subtraction Test"""
+        self.assertTrue(simpSub())
+
+    def test_simp_mul(self):
+        """ Simple Multiplication Test"""
+        self.assertTrue(simpMul())
+
+    def test_simp_div(self):
+        """ Simple Division Test"""
+        self.assertTrue(simpDiv())
+
+    def test_test1(self):
+        """ Miscellaneous Test"""
+        self.assertTrue(test1())
+
+    def test_div(self):
+        """ Division Test"""
+        self.assertTrue(divtest())
+
+    def test_short_grad(self):
+        """ Short Grad Test"""
+        self.assertTrue(gradTestShort())
+
+    def test_long_grad(self):
+        """ Long Gradient Test"""
+        self.assertTrue(gradTestLong())
+
+    def test_simp_grad(self):
+        """ Simple gradient test"""
+        self.assertTrue(gradTestSimple())
+
+    def test_ops(self):
+        """ Test Ops"""
+        self.assertTrue(testOps())
+
+    def test_activ_fn(self):
+        """ Activation Function test"""
+        self.assertTrue(activ_fns())
+
+    def test_tensor_sum(self):
+        """ Tensor Sum test"""
+        self.assertTrue(TensorSum())
+
+    def test_tensor_op(self):
+        """ Tensor operations test"""
+        self.assertTrue(TensorOp())
+
+    def test_dot_prod(self):
+        """ Dot Product"""
+        self.assertTrue(dotProduct())
+
+
+def run_test():
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)
 
 if __name__ == '__main__':
-    simpSum()
-    simpSub()
-    simpMul()
-    simpDiv()
-    test1()
-    divtest()
-    gradTestShort()
-    gradTestLong()
-    gradTestSimple()
-    testOps()
-    activ_fns()
-    TensorSum()
-    TensorOp()
-    dotProduct()
+    run_test()
