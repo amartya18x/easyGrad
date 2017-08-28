@@ -1,6 +1,16 @@
 [![Build Status](https://travis-ci.org/amartya18x/easyGrad.svg?branch=master)](https://travis-ci.org/amartya18x/easyGrad)
 # Easy Grad
+__EasyGrad__ is now available via pip and it is the easiest way to use it. To install __easyGrad__ via pip
 
+```bash
+   pip install easyGrad
+```
+
+To install it from source, clone this repository and run
+
+```bash
+   python setup.py install
+```
 This library aims to provide an easy implementation of doing symbolic operations in python
 ## Operators allowed
 
